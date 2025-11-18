@@ -1,7 +1,7 @@
 // Code.gs - Apps Script
 const SPREADSHEET_ID = "1Gp1vAQ8o5jD0dfNvlr7R4oKzaLtnXiqUk7nxWXdVQgk"; // e.g. "1AbcDeFG..."
 // optional: sheet name
-const SHEET_NAME = "Orders";
+const SHEET_NAME = "Orders-Flavours of Amma";
 
 function doPost(e) {
   try {
