@@ -1,0 +1,350 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Flavours of Amma — Order</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:18px;background:#faf7f0}
+    .wrap{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;color:#b40c0c}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+    @media(min-width:900px){ .grid{grid-template-columns: 1fr 360px} }
+    .item-list{display:flex;flex-direction:column;gap:12px}
+    .product{display:flex;gap:12px;align-items:center;padding:12px;background:white;border-radius:10px;border:1px solid #eee}
+    .product img{width:100px;height:100px;object-fit:cover;border-radius:8px}
+    .prod-info{flex:1}
+    .prod-info h3{margin:0 0 6px 0}
+    .row{display:flex;gap:10px;align-items:center}
+    select, input[type="text"], input[type="email"], input[type="tel"], input[type="number"]{
+      padding:8px;border-radius:6px;border:1px solid #ccc;font-size:14px
+    }
+    .qty-control{display:flex;align-items:center;gap:8px}
+    .qty-btn{padding:6px 10px;font-size:18px;border-radius:6px;border:0;background:#f1f1f1;cursor:pointer}
+    .totals{padding:14px;background:#fff;border-radius:10px;border:1px solid #eee}
+    .totals .line{display:flex;justify-content:space-between;padding:6px 0}
+    .grand{font-weight:700;font-size:20px;color:#0b750b}
+    .action{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+    .btn-primary{background:#0b750b;color:white}
+    .btn-secondary{background:#ffb4b4;color:#6b0000}
+    form.address{display:flex;flex-direction:column;gap:8px;margin-top:10px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee}
+    label{font-size:13px;color:#333}
+    .small{font-size:13px;color:#666}
+    #qrcode{margin-top:12px;padding:12px;background:white;border-radius:10px;border:1px solid #eee;display:inline-block}
+    .note{margin-top:12px;color:#111}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="https://via.placeholder.com/80x80.png?text=Logo" alt="logo" style="border-radius:8px"/>
+      <div><h1>Flavours of Amma</h1><div class="small">Fresh pickles — order online</div></div>
+    </header>
+
+    <div style="margin-top:18px">
+      <button class="btn btn-primary" onclick="document.getElementById('orderSection').scrollIntoView({behavior:'smooth'})">Start ordering</button>
+    </div>
+
+    <section id="orderSection" style="margin-top:18px" class="grid">
+      <!-- left: product list -->
+      <div class="item-list">
+        <!-- product card template repeated for 4 products -->
+        <div class="product" data-key="chicken">
+          <img src="https://via.placeholder.com/200x200.png?text=Chicken" alt="chicken">
+          <div class="prod-info">
+            <h3>Chicken Pickle</h3>
+            <div class="row">
+              <label>Weight</label>
+              <select id="weight-chicken" onchange="recalc('chicken')">
+                <option value="999">1 kg (₹999)</option>
+                <option value="599">1/2 kg (₹599)</option>
+                <option value="299">1/4 kg (₹299)</option>
+              </select>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <label>Quantity</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('chicken',-1)">−</button>
+                <div id="qty-chicken">0</div>
+                <button class="qty-btn" onclick="changeQty('chicken',1)">+</button>
+              </div>
+            </div>
+            <div class="small" style="margin-top:8px">Item total: ₹<span id="total-chicken">0</span></div>
+          </div>
+        </div>
+
+        <div class="product" data-key="mutton">
+          <img src="https://via.placeholder.com/200x200.png?text=Mutton" alt="mutton">
+          <div class="prod-info">
+            <h3>Mutton Pickle</h3>
+            <div class="row">
+              <label>Weight</label>
+              <select id="weight-mutton" onchange="recalc('mutton')">
+                <option value="1799">1 kg (₹1799)</option>
+                <option value="999">1/2 kg (₹999)</option>
+                <option value="599">1/4 kg (₹599)</option>
+              </select>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <label>Quantity</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('mutton',-1)">−</button>
+                <div id="qty-mutton">0</div>
+                <button class="qty-btn" onclick="changeQty('mutton',1)">+</button>
+              </div>
+            </div>
+            <div class="small" style="margin-top:8px">Item total: ₹<span id="total-mutton">0</span></div>
+          </div>
+        </div>
+
+        <div class="product" data-key="fish">
+          <img src="https://via.placeholder.com/200x200.png?text=Fish" alt="fish">
+          <div class="prod-info">
+            <h3>Fish Pickle</h3>
+            <div class="row">
+              <label>Weight</label>
+              <select id="weight-fish" onchange="recalc('fish')">
+                <option value="1499">1 kg (₹1499)</option>
+                <option value="799">1/2 kg (₹799)</option>
+                <option value="499">1/4 kg (₹499)</option>
+              </select>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <label>Quantity</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('fish',-1)">−</button>
+                <div id="qty-fish">0</div>
+                <button class="qty-btn" onclick="changeQty('fish',1)">+</button>
+              </div>
+            </div>
+            <div class="small" style="margin-top:8px">Item total: ₹<span id="total-fish">0</span></div>
+          </div>
+        </div>
+
+        <div class="product" data-key="prawns">
+          <img src="https://via.placeholder.com/200x200.png?text=Prawns" alt="prawns">
+          <div class="prod-info">
+            <h3>Prawns Pickle</h3>
+            <div class="row">
+              <label>Weight</label>
+              <select id="weight-prawns" onchange="recalc('prawns')">
+                <option value="1199">1 kg (₹1199)</option>
+                <option value="699">1/2 kg (₹699)</option>
+                <option value="399">1/4 kg (₹399)</option>
+              </select>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <label>Quantity</label>
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty('prawns',-1)">−</button>
+                <div id="qty-prawns">0</div>
+                <button class="qty-btn" onclick="changeQty('prawns',1)">+</button>
+              </div>
+            </div>
+            <div class="small" style="margin-top:8px">Item total: ₹<span id="total-prawns">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right column: totals + address + submit -->
+      <div>
+        <div class="totals">
+          <div class="line"><div>Chicken</div><div>₹<span id="line-chicken">0</span></div></div>
+          <div class="line"><div>Mutton</div><div>₹<span id="line-mutton">0</span></div></div>
+          <div class="line"><div>Fish</div><div>₹<span id="line-fish">0</span></div></div>
+          <div class="line"><div>Prawns</div><div>₹<span id="line-prawns">0</span></div></div>
+          <div class="line grand"><div>Grand Total</div><div>₹<span id="grand">0</span></div></div>
+        </div>
+
+        <form id="custForm" class="address" onsubmit="return handleSubmit(event)">
+          <h3>Customer details</h3>
+          <label>Name</label>
+          <input id="name" required type="text" placeholder="Full name" />
+
+          <label>Email</label>
+          <input id="email" required type="email" placeholder="you@example.com" />
+
+          <label>Phone</label>
+          <input id="phone" required type="tel" placeholder="10 digit phone" />
+
+          <h4 style="margin:8px 0 0 0">Address</h4>
+          <label>Door / Flat No.</label><input id="door" type="text" required />
+          <label>Street / House name</label><input id="street" type="text" required />
+          <label>Locality</label><input id="locality" type="text" required />
+          <label>Landmark</label><input id="landmark" type="text" />
+          <div style="display:flex;gap:8px">
+            <div style="flex:1"><label>City</label><input id="city" type="text" required /></div>
+            <div style="flex:1"><label>State</label><input id="state" type="text" required /></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1"><label>Country</label><input id="country" type="text" value="India" required /></div>
+            <div style="flex:1"><label>Pincode</label><input id="pincode" type="text" required /></div>
+          </div>
+
+          <div class="action">
+            <button type="submit" class="btn btn-primary">Save & Get Payment QR</button>
+            <button type="button" class="btn btn-secondary" onclick="resetOrder()">Reset</button>
+          </div>
+        </form>
+
+        <div id="qrcode" style="display:none"></div>
+        <div id="afterMsg" style="display:none" class="note">
+          Thank you! We will reach out to you on your email and WhatsApp once payment is received.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- QRCode lib -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+  <script>
+    // ========== CONFIGURE THESE ==========
+    const WEBAPP_URL = "YOUR_WEBAPP_URL"; // <--- replace with your Apps Script web app URL (see backend below)
+    const UPI_ID = "YOUR_UPI_ID";         // <--- replace with merchant UPI ID (ex: flavoursofamma@oksbi)
+    const MERCHANT_NAME = "Flavours of Amma";
+    // =====================================
+
+    // convenience list
+    const items = ['chicken','mutton','fish','prawns'];
+
+    function changeQty(key, delta){
+      const el = document.getElementById('qty-'+key);
+      let v = parseInt(el.innerText)||0;
+      v = Math.max(0, v + delta);
+      el.innerText = v;
+      recalc(key);
+    }
+
+    function recalc(key){
+      const price = parseInt(document.getElementById('weight-'+key).value) || 0;
+      const qty = parseInt(document.getElementById('qty-'+key).innerText) || 0;
+      const total = price * qty;
+      document.getElementById('total-'+key).innerText = total;
+      document.getElementById('line-'+key).innerText = total;
+      recalcGrand();
+    }
+
+    function recalcGrand(){
+      let grand = 0;
+      items.forEach(k=>{
+        grand += parseInt(document.getElementById('total-'+k).innerText) || 0;
+      });
+      document.getElementById('grand').innerText = grand;
+    }
+
+    function resetOrder(){
+      items.forEach(k=>{
+        document.getElementById('qty-'+k).innerText = 0;
+        document.getElementById('weight-'+k).selectedIndex = 0;
+        document.getElementById('total-'+k).innerText = 0;
+        document.getElementById('line-'+k).innerText = 0;
+      });
+      document.getElementById('grand').innerText = 0;
+      document.getElementById('custForm').reset();
+      document.getElementById('qrcode').style.display='none';
+      document.getElementById('afterMsg').style.display='none';
+    }
+
+    // builds payload to send to backend
+    function buildPayload(){
+      const payload = {
+        timestamp: new Date().toISOString(),
+        items:{},
+        grandTotal: parseInt(document.getElementById('grand').innerText) || 0,
+        customer:{
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          address:{
+            door: document.getElementById('door').value.trim(),
+            street: document.getElementById('street').value.trim(),
+            locality: document.getElementById('locality').value.trim(),
+            landmark: document.getElementById('landmark').value.trim(),
+            city: document.getElementById('city').value.trim(),
+            state: document.getElementById('state').value.trim(),
+            country: document.getElementById('country').value.trim(),
+            pincode: document.getElementById('pincode').value.trim()
+          }
+        }
+      };
+      items.forEach(k=>{
+        payload.items[k] = {
+          weightText: document.getElementById('weight-'+k).selectedOptions[0].text,
+          weightValue: parseInt(document.getElementById('weight-'+k).value),
+          qty: parseInt(document.getElementById('qty-'+k).innerText) || 0,
+          lineTotal: parseInt(document.getElementById('total-'+k).innerText) || 0
+        };
+      });
+      return payload;
+    }
+
+    // submit handler
+    async function handleSubmit(e){
+      e.preventDefault();
+      // simple validation: ensure customer info + at least one item qty>0
+      const payload = buildPayload();
+      if(!payload.customer.name || !payload.customer.email || !payload.customer.phone){
+        alert('Please fill name, email and phone.');
+        return;
+      }
+      const anyQty = items.some(k=>payload.items[k].qty>0);
+      if(!anyQty){
+        alert('Please add at least one item to your order.');
+        return;
+      }
+
+      // send to backend (Google Apps Script) - replace WEBAPP_URL with your deployed URL
+      try {
+        const res = await fetch(WEBAPP_URL, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        // we don't rely on returned data heavily; assume success if status 200
+        if(res.ok || res.status===0){ // status===0 for local/dev
+          showPayment(payload.grandTotal);
+        } else {
+          alert('There was a problem saving your order. Try again.');
+        }
+      } catch(err){
+        console.error(err);
+        alert('Could not connect to server. Make sure WEBAPP_URL is set and deployed.');
+      }
+      return false;
+    }
+
+    //  ============================
+    // QR generation: generate UPI link and QR image using qrcode library
+    // UPI format: upi://pay?pa=UPI_ID&pn=Merchant+Name&am=AMOUNT&cu=INR&tn=note
+    // Note: some apps accept UPI link scan from QR; works for GPay/PhonePe/Paytm in most cases.
+    // ============================
+    function showPayment(amount){
+      if(!UPI_ID || !UPI_ID.trim() || UPI_ID==='YOUR_UPI_ID'){
+        alert('Merchant UPI ID is not set. Edit the code and set UPI_ID.');
+        return;
+      }
+      const upi = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${encodeURIComponent(amount)}&cu=INR&tn=${encodeURIComponent('Order payment')}`;
+      const qDiv = document.getElementById('qrcode');
+      qDiv.innerHTML = ''; qDiv.style.display='block';
+      // display textual info
+      const info = document.createElement('div'); info.style.marginBottom='8px';
+      info.innerHTML = `<strong>Scan to pay ₹${amount}</strong><div class="small">Supported: GPay / PhonePe / Paytm / BHIM</div>`;
+      qDiv.appendChild(info);
+      // draw QR
+      QRCode.toDataURL(upi, {width:260, margin:2}).then(url=>{
+        const img = document.createElement('img');
+        img.src = url; img.alt='UPI QR'; img.style.width='260px';
+        qDiv.appendChild(img);
+        // show post-payment note
+        document.getElementById('afterMsg').style.display='block';
+      }).catch(err=>{
+        console.error(err);
+        qDiv.innerText = 'Could not generate QR.';
+      });
+    }
+  </script>
+</body>
+</html>
